@@ -324,6 +324,24 @@ func printAPIKeyNotSetMessage(modelConfig ModelConfig) {
 
 		msg2, _ := r.Render(message_string)
 		fmt.Printf("\n  %v%v\n", msg1, msg2)
+	case "DEEPSEEK_API_KEY":
+		msg1 := styleRed.Render("DEEPSEEK_API_KEY environment variable not set.")
+
+		deepseekSyntax := shellSyntax
+		if runtime.GOOS == "windows" {
+			deepseekSyntax = "\n```powershell\n$env:DEEPSEEK_API_KEY = \"[your key]\"\n```"
+		} else {
+			deepseekSyntax = "\n```bash\nexport DEEPSEEK_API_KEY=[your key]\n```"
+		}
+
+		message_string := fmt.Sprintf(`
+	1. Generate your API key at https://platform.deepseek.com/api_keys
+	2. Set your key by running:
+	%s
+	3. (Recommended) Add that ^ line to your %s file.`, deepseekSyntax, profileScriptName)
+
+		msg2, _ := r.Render(message_string)
+		fmt.Printf("\n  %v%v\n", msg1, msg2)
 	default:
 		msg := styleRed.Render(auth + " environment variable not set.")
 		fmt.Printf("\n  %v", msg)

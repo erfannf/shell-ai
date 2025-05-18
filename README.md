@@ -31,14 +31,41 @@ _New: ShellAI now supports local models! See [Custom Model Configuration](#custo
 ### Homebrew
 
 ```bash
-brew tap ibigio/tap
+brew tap erfannf/tap
 brew install shell-ai
 ```
 
-### Linux
+### Linux/macOS
 
 ```bash
-curl https://raw.githubusercontent.com/ibigio/shell-ai/main/install.sh | bash
+curl https://raw.githubusercontent.com/erfannf/shell-ai/main/install.sh | bash
+```
+
+### Windows
+
+```powershell
+Invoke-RestMethod -Uri https://raw.githubusercontent.com/erfannf/shell-ai/main/install.ps1 | powershell -Command -
+```
+
+# Uninstall
+
+### Homebrew
+
+```bash
+brew uninstall shell-ai
+brew untap erfannf/tap
+```
+
+### Linux/macOS
+
+```bash
+rm -f /usr/local/bin/q
+```
+
+### Windows
+
+```powershell
+Remove-Item -Path "$env:LOCALAPPDATA\Programs\shell-ai\q.exe" -Force
 ```
 
 # Usage
@@ -118,7 +145,7 @@ You can now configure model prompts and even add your own model setups in the `~
 
 ### Config File Syntax
 
-````yaml
+```yaml
 preferences:
   default_model: gpt-4-1106-preview
 
@@ -139,7 +166,7 @@ models:
     # other models ...
 
 config_format_version: "1"
-````
+```
 
 **Note:** The `auth_env_var` is set to `OPENAI_API_KEY` verbatim, not the key itself, so as to not keep sensitive information in the config file.
 
@@ -159,7 +186,7 @@ Here's what I did:
 
 4. Finally I added the new `model` config to my `~/.shell-ai/config.yaml`, and wrestled with the prompt until it worked – bet you can do better. (As you can see, YAML is [flexible](https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html).)
 
-````yaml
+```yaml
 models:
   - name: stablelm-zephyr-3b.Q8_0
     endpoint: http://127.0.0.1:8080/v1/chat/completions
@@ -191,7 +218,7 @@ models:
           ```
 
 # other models ...
-````
+```
 
 and also updated the default model (which you can also do from `q config`):
 
@@ -203,6 +230,28 @@ preferences:
 And huzzah! You can now use ShellAI on a plane.
 
 (Fun fact, I implemented a good bit of the initial config TUI on a plane using this exact local model.)
+
+### Setting Up DeepSeek Models
+
+ShellAI now supports DeepSeek's powerful LLMs via their API. To use DeepSeek models:
+
+1. Create an account at [DeepSeek Platform](https://platform.deepseek.com)
+2. Generate an API key at https://platform.deepseek.com/api_keys
+3. Set your DeepSeek API key as an environment variable:
+
+```bash
+# For Linux/macOS
+export DEEPSEEK_API_KEY=[your key]
+
+# For Windows (PowerShell)
+$env:DEEPSEEK_API_KEY = "[your key]"
+```
+
+4. Run `q config` and select "Change Default Model" to switch to one of the DeepSeek models:
+   - `deepseek-chat`: General-purpose conversational model
+   - `deepseek-coder`: Specialized for code and programming tasks
+
+The DeepSeek models are already configured in ShellAI, so you don't need to modify your config file manually.
 
 ### Setting Up Azure OpenAI endpoint
 
