@@ -129,18 +129,23 @@ func (m model) getConnectionError(err error) string {
 	styleRed := lipgloss.NewStyle().Foreground(lipgloss.Color("9"))
 	styleGreen := lipgloss.NewStyle().Foreground(lipgloss.Color("2"))
 	styleDim := lipgloss.NewStyle().Faint(true).Width(m.maxWidth).PaddingLeft(2)
+
+	// Create a more generic error message
+	errorMsg := "Error: Failed to connect to the API service."
+
 	message := fmt.Sprintf("\n  %v\n\n%v\n",
-		styleRed.Render("Error: Failed to connect to OpenAI."),
+		styleRed.Render(errorMsg),
 		styleDim.Render(err.Error()))
+
+	// Add information for rate limit errors
 	if util.IsLikelyBillingError(err.Error()) {
-		message = fmt.Sprintf("%v\n  %v %v\n\n  %v%v\n\n",
+		message = fmt.Sprintf("%v\n  %v %v\n\n",
 			message,
 			styleGreen.Render("Hint:"),
-			"You may need to set up billing. You can do so here:",
-			styleGreen.Render("->"),
-			styleDim.Render("https://platform.openai.com/account/billing"),
+			"You may have reached your rate limit. Check your API usage and billing status.",
 		)
 	}
+
 	return message
 }
 
