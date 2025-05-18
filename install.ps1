@@ -1,5 +1,5 @@
 param(
-    [string]$repoowner = "ibigio",
+    [string]$repoowner = "erfannf",
     [string]$reponame = "shell-ai",
     [string]$toolname = "shell-ai",
     [string]$toolsymlink = "q",
